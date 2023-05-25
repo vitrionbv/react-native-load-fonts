@@ -22,7 +22,12 @@ interface FontData {
   type: string;
 }
 export const loadedFonts: { [name: string]: string } = {};
-export function loadFont(name: string, data: string, type: string, forceLoad?: boolean): Promise<string> {
+export function loadFont(
+  name: string,
+  data: string,
+  type: string,
+  forceLoad?: boolean
+): Promise<string> {
   /* Check if this font was already loaded */
   if (!forceLoad && loadedFonts[name]) {
     const loadedFont = loadedFonts[name];
@@ -37,7 +42,7 @@ export function loadFont(name: string, data: string, type: string, forceLoad?: b
       {
         name: name,
         data: data,
-        type: type
+        type: type,
       },
       (err: Error | null, givenName?: string) => {
         if (err) {
@@ -53,12 +58,15 @@ export function loadFont(name: string, data: string, type: string, forceLoad?: b
   });
 }
 
-export function loadFontFromFile(name: string, filePath: string): Promise<string> {
+export function loadFontFromFile(
+  name: string,
+  filePath: string
+): Promise<string> {
   return new Promise((resolve, reject) => {
     LoadFonts.loadFontFromFile(
       {
         name,
-        filePath
+        filePath,
       },
       (err: Error | null, givenName?: string) => {
         if (err) {
@@ -71,7 +79,10 @@ export function loadFontFromFile(name: string, filePath: string): Promise<string
   });
 }
 
-export function loadFonts(fontList: FontData[] | FontData, forceLoad?: boolean): Promise<string[]> {
+export function loadFonts(
+  fontList: FontData[] | FontData,
+  forceLoad?: boolean
+): Promise<string[]> {
   const _fontList: FontData[] = Array.isArray(fontList) ? fontList : [fontList];
 
   if (!_fontList.length) {
@@ -87,12 +98,12 @@ export function loadFonts(fontList: FontData[] | FontData, forceLoad?: boolean):
 
 export function getLoadedFonts(): Promise<string[]> {
   return new Promise((resolve, reject) => {
-    LoadFonts.getLoadedFonts((error: Error | null, loadedFonts: string[]) => {
+    LoadFonts.getLoadedFonts((error: Error | null, iLoadedFonts: string[]) => {
       if (error) {
         reject(error);
         return;
       }
-      resolve(loadedFonts);
+      resolve(iLoadedFonts);
     });
   });
 }
