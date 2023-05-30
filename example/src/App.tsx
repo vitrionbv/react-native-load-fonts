@@ -1,17 +1,37 @@
+/* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import { StyleSheet, View, Text, Pressable } from 'react-native';
-import { loadedFonts, loadFont } from 'react-native-load-fonts';
-import { base64fontBobaCups, base64fontDelight } from './Fonts';
+import { loadedFonts, loadFont } from '@vitrion/react-native-load-fonts';
+import {
+  base64fontBobaCups,
+  base64fontDelight,
+  base64fontMerriweatherBold,
+  base64fontMerriweatherRegular,
+  base64fontVergillia,
+} from './Fonts';
 
 export default function App() {
   const [font, setFont] = useState('');
+  const [fontWeight, setFontWeight] = useState<'normal' | 'bold'>('normal');
+  const [fontStyle, setFontStyle] = useState<'normal' | 'italic'>('normal');
   const [loadedFontsArray, setLoadedFonts] = useState({});
   const loadTestFont = (name: string, base64: string) => {
     loadFont(name, base64, 'ttf', true).then(function (n) {
       console.log('Loaded font successfully. Font name is: ', name);
       setFont(n);
+      let newFont = n.toLowerCase();
+      if (newFont.includes('_bold') || newFont.includes('-bold')) {
+        setFontWeight('bold');
+      } else {
+        setFontWeight('normal');
+      }
+      if (newFont.includes('_italic') || newFont.includes('-italic')) {
+        setFontStyle('italic');
+      } else {
+        setFontStyle('normal');
+      }
     });
   };
 
@@ -22,7 +42,13 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text
-        style={{ fontFamily: font || 'Arial', fontSize: 20, marginBottom: 10 }}
+        style={{
+          fontFamily: font || 'Arial',
+          fontSize: 20,
+          marginBottom: 10,
+          fontWeight,
+          fontStyle,
+        }}
       >
         Font test
       </Text>
@@ -44,6 +70,35 @@ export default function App() {
         }}
       >
         <Text style={{ color: '#4e8df8' }}>Load Font Delight</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          loadTestFont('Merriweather-Bold', base64fontMerriweatherBold);
+        }}
+      >
+        <Text style={{ color: '#4e8df8' }}>Merriweather-Bold</Text>
+      </Pressable>
+
+      <Pressable
+        onPress={() => {
+          loadTestFont('Merriweather', base64fontMerriweatherRegular);
+        }}
+      >
+        <Text style={{ color: '#4e8df8' }}>Merriweather-Regular</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          loadTestFont('Vergillia', base64fontVergillia);
+        }}
+      >
+        <Text style={{ color: '#4e8df8' }}>Load Vergillia</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          setFont('Arial');
+        }}
+      >
+        <Text style={{ color: '#4e8df8' }}>Default to Arial</Text>
       </Pressable>
       <View>
         <Text style={{ fontWeight: 'bold', marginTop: 20 }}>Loaded Fonts:</Text>

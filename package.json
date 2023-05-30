@@ -49,6 +49,7 @@
   },
   "homepage": "https://github.com/vitrionbv/react-native-load-fonts#readme",
   "publishConfig": {
+    "registry": "https://registry.npmjs.org",
     "access": "public"
   },
   "devDependencies": {
